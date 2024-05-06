@@ -27,12 +27,9 @@ class Plugin : Plugin<Project> {
                 task.doLast {
                     FindSpecificationFiles().findSpecs(pathToSpec = extensions.specPath, pathToProject = pathToProject)
                         .forEach { spec ->
-                            println(
-                                """
-                        ################
-                        Start check: ${spec.name.toUpperCase()}
-                        ################
-                    """.trimIndent()
+                            println("\u001b[0;33m################"
+                                +"\nStart check: ${spec.name.toUpperCase()}"
+                                +"\n################\u001b[0m"
                             )
                             val openAPI = OpenAPIParser().readLocation(spec.toString(), null, null).openAPI
                             val errorInSpec: MutableList<String> = ArrayList()
@@ -45,10 +42,10 @@ class Plugin : Plugin<Project> {
 
                             if (errorInSpec.isNotEmpty()) {
                                 errorInSpec.forEachIndexed { index, error ->
-                                    println("\u001b[0;31m${index + 1}. $error")
+                                    println("\u001b[0;31m${index + 1}. $error\u001b[0m")
                                 }
                             } else {
-                                println("\u001b[0;32mСпецификация в порядке, так держать!")
+                                println("\u001b[0;32mСпецификация в порядке, так держать!\u001b[0m")
                             }
                         }
                 }
