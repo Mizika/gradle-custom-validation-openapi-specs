@@ -32,7 +32,11 @@ repositories {
 dependencies {
     implementation(
             "org.jetbrains.kotlin:kotlin-stdlib",
-            "com.google.code.gson:gson:2.10.1"
+            "com.google.code.gson:gson:2.10.1",
+            "io.swagger.parser.v3:swagger-parser-v3:2.1.22",
+            "io.swagger.parser.v3:swagger-parser:2.1.22",
+            "org.apache.commons:commons-lang3:3.14.0",
+            "org.yaml:snakeyaml:2.2"
     )
 }
 
