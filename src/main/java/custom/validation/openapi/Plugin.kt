@@ -1,7 +1,10 @@
 package custom.validation.openapi
 
+import custom.validation.openapi.rules.methods.description.DescriptionForMethodIsNotEmpty
+import custom.validation.openapi.rules.methods.errorcode.BasicResponseCode
 import custom.validation.openapi.rules.methods.operationid.OperationIdCamelCase
 import custom.validation.openapi.rules.methods.operationid.OperationIdIsNotEmpty
+import custom.validation.openapi.rules.methods.summary.SummaryForMethodIsNotEmpty
 import custom.validation.openapi.utils.FindSpecificationFiles
 import io.swagger.parser.OpenAPIParser
 import org.gradle.api.Plugin
@@ -39,6 +42,15 @@ class Plugin : Plugin<Project> {
 
                             val operationIdNotEmpty = OperationIdIsNotEmpty().checkOperationIdIsNotEmpty(openAPI)
                             errorInSpec.addAll(operationIdNotEmpty!!)
+
+                            val descriptionNotEmpty = DescriptionForMethodIsNotEmpty().checkDescriptionIsNotEmpty(openAPI)
+                            errorInSpec.addAll(descriptionNotEmpty!!)
+
+                            val summaryNotEmpty = SummaryForMethodIsNotEmpty().checkSummaryIsNotEmpty(openAPI)
+                            errorInSpec.addAll(summaryNotEmpty!!)
+
+                            val basicResponseCode = BasicResponseCode().checkBasicResponseCode(openAPI)
+                            errorInSpec.addAll(basicResponseCode!!)
 
                             if (errorInSpec.isNotEmpty()) {
                                 errorInSpec.forEachIndexed { index, error ->
