@@ -1,0 +1,75 @@
+buildscript {
+    repositories {
+        mavenCentral()
+        gradlePluginPortal()
+        maven {
+            url "https://plugins.gradle.org/m2/"
+        }
+    }
+    dependencies {
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:2.0.0-RC2"
+        classpath "com.gradle.publish:plugin-publish-plugin:1.2.1"
+    }
+}
+
+apply plugin: 'maven-publish'
+apply plugin: 'java'
+apply plugin: 'java-gradle-plugin'
+apply plugin: "org.jetbrains.kotlin.jvm"
+apply plugin: "com.gradle.plugin-publish"
+
+group 'custom.validation.openapi'
+version '1.0.0'
+
+repositories {
+    mavenCentral()
+    gradlePluginPortal()
+    maven {
+        url "https://plugins.gradle.org/m2/"
+    }
+}
+
+dependencies {
+    implementation(
+            "org.jetbrains.kotlin:kotlin-stdlib",
+            "com.google.code.gson:gson:2.10.1"
+    )
+}
+
+gradlePlugin {
+    plugins {
+        release {
+            id = 'custom.validation.openapi.validation-openapi-specs'
+            implementationClass = 'custom.validation.openapi.Plugin'
+        }
+    }
+}
+
+task fixIdeaPluginClasspath {
+    doFirst {
+        configure(tasks.pluginUnderTestMetadata) {
+            def ideaClassesPath = project.buildDir.toPath().resolveSibling("out").resolve("production")
+            def newClasspath = pluginClasspath as List
+            newClasspath.add(0, ideaClassesPath)
+            pluginClasspath.setFrom(newClasspath)
+        }
+    }
+}
+pluginUnderTestMetadata.mustRunAfter(fixIdeaPluginClasspath)
+
+publishing {
+    repositories {
+        def releaseRepo = "https://maven.repo.test/releases/"
+        def snapshotRepo = "https://maven.repo.test/snapshot/"
+        def deploymentUsername = "test-user"
+        def deploymentPassword = "12345"
+        def repo = (rootProject.version as String).contains('SNAPSHOT') ? snapshotRepo : releaseRepo
+        maven {
+            url "$repo"
+            credentials {
+                username "$deploymentUsername"
+                password "$deploymentPassword"
+            }
+        }
+    }
+}
