@@ -39,7 +39,7 @@ dependencies {
 gradlePlugin {
     plugins {
         release {
-            id = 'custom.validation.openapi.validation-openapi-specs'
+            id = 'validation-openapi-specs'
             implementationClass = 'custom.validation.openapi.Plugin'
         }
     }
