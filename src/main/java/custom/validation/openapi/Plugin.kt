@@ -4,6 +4,7 @@ import custom.validation.openapi.rules.methods.description.DescriptionForMethodI
 import custom.validation.openapi.rules.methods.errorcode.BasicResponseCode
 import custom.validation.openapi.rules.methods.operationid.OperationIdCamelCase
 import custom.validation.openapi.rules.methods.operationid.OperationIdIsNotEmpty
+import custom.validation.openapi.rules.methods.parameters.FormatNameOfParameters
 import custom.validation.openapi.rules.methods.summary.SummaryForMethodIsNotEmpty
 import custom.validation.openapi.utils.FindSpecificationFiles
 import io.swagger.parser.OpenAPIParser
@@ -51,6 +52,9 @@ class Plugin : Plugin<Project> {
 
                             val basicResponseCode = BasicResponseCode().checkBasicResponseCode(openAPI)
                             errorInSpec.addAll(basicResponseCode!!)
+
+                            val formatParameters = FormatNameOfParameters().checkFormatNameOfParameters(openAPI)
+                            errorInSpec.addAll(formatParameters!!)
 
                             if (errorInSpec.isNotEmpty()) {
                                 errorInSpec.forEachIndexed { index, error ->
