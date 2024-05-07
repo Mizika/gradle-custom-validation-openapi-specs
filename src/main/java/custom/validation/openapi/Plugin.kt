@@ -1,11 +1,13 @@
 package custom.validation.openapi
 
+import custom.validation.openapi.rules.methods.CombinedCheckMethods
 import custom.validation.openapi.rules.methods.description.DescriptionForMethodIsNotEmpty
 import custom.validation.openapi.rules.methods.errorcode.BasicResponseCode
 import custom.validation.openapi.rules.methods.operationid.OperationIdCamelCase
 import custom.validation.openapi.rules.methods.operationid.OperationIdIsNotEmpty
 import custom.validation.openapi.rules.methods.parameters.FormatNameOfParameters
 import custom.validation.openapi.rules.methods.summary.SummaryForMethodIsNotEmpty
+import custom.validation.openapi.rules.models.CombinedCheckModels
 import custom.validation.openapi.rules.models.descriptions.ModelDescription
 import custom.validation.openapi.rules.models.descriptions.ModelPropertiesDescription
 import custom.validation.openapi.rules.models.fields.RequiredFieldInModel
@@ -22,9 +24,7 @@ class Plugin : Plugin<Project> {
     override fun apply(target: Project) {
         println(
             """
-            ############
             Apply validation openapi specs plugin
-            ############
         """.trimIndent()
         )
 
@@ -43,38 +43,11 @@ class Plugin : Plugin<Project> {
                             val openAPI = OpenAPIParser().readLocation(spec.toString(), null, null).openAPI
                             val errorInSpec: MutableList<String> = ArrayList()
 
-                            val operationIdCamelCase = OperationIdCamelCase().checkOperationIdCamelCase(openAPI)
-                            errorInSpec.addAll(operationIdCamelCase!!)
+                            val checkMethods = CombinedCheckMethods().combinedCheckMethods(openAPI)
+                            errorInSpec.addAll(checkMethods)
 
-                            val operationIdNotEmpty = OperationIdIsNotEmpty().checkOperationIdIsNotEmpty(openAPI)
-                            errorInSpec.addAll(operationIdNotEmpty!!)
-
-                            val descriptionNotEmpty = DescriptionForMethodIsNotEmpty().checkDescriptionIsNotEmpty(openAPI)
-                            errorInSpec.addAll(descriptionNotEmpty!!)
-
-                            val summaryNotEmpty = SummaryForMethodIsNotEmpty().checkSummaryIsNotEmpty(openAPI)
-                            errorInSpec.addAll(summaryNotEmpty!!)
-
-                            val basicResponseCode = BasicResponseCode().checkBasicResponseCode(openAPI)
-                            errorInSpec.addAll(basicResponseCode)
-
-                            val formatParameters = FormatNameOfParameters().checkFormatNameOfParameters(openAPI)
-                            errorInSpec.addAll(formatParameters!!)
-
-                            val modelDescriptions = ModelDescription().checkModelDescription(openAPI)
-                            errorInSpec.addAll(modelDescriptions!!)
-
-                            val modelPropertiesDescription = ModelPropertiesDescription().checkModelPropertiesDescription(openAPI)
-                            errorInSpec.addAll(modelPropertiesDescription)
-
-                            val modelName = ModelName().checkModelName(openAPI)
-                            errorInSpec.addAll(modelName!!)
-
-                            val requiredFieldInModel = RequiredFieldInModel().checkRequiredFieldInModel(openAPI)
-                            errorInSpec.addAll(requiredFieldInModel)
-
-                            val modelEnumName = ModelEnumName().checkModelEnumName(openAPI)
-                            errorInSpec.addAll(modelEnumName)
+                            val checkModels = CombinedCheckModels().combinedCheckModels(openAPI)
+                            errorInSpec.addAll(checkModels)
 
                             if (errorInSpec.isNotEmpty()) {
                                 errorInSpec.forEachIndexed { index, error ->
