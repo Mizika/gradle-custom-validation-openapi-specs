@@ -53,7 +53,8 @@ validator {
     specPath = "src/main/resources"
     config = [
             "ump-bdui": [
-                    "basic-response-code": true
+                    "basic-response-code": true,
+                     "operationId-present": true
             ]
     ]
 }

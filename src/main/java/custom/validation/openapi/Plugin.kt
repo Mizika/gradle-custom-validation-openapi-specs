@@ -1,19 +1,9 @@
 package custom.validation.openapi
 
 import custom.validation.openapi.rules.methods.CombinedCheckMethods
-import custom.validation.openapi.rules.methods.description.DescriptionForMethodIsNotEmpty
-import custom.validation.openapi.rules.methods.errorcode.BasicResponseCode
-import custom.validation.openapi.rules.methods.operationid.OperationIdCamelCase
-import custom.validation.openapi.rules.methods.operationid.OperationIdIsNotEmpty
-import custom.validation.openapi.rules.methods.parameters.FormatNameOfParameters
-import custom.validation.openapi.rules.methods.summary.SummaryForMethodIsNotEmpty
 import custom.validation.openapi.rules.models.CombinedCheckModels
-import custom.validation.openapi.rules.models.descriptions.ModelDescription
-import custom.validation.openapi.rules.models.descriptions.ModelPropertiesDescription
-import custom.validation.openapi.rules.models.fields.RequiredFieldInModel
-import custom.validation.openapi.rules.models.name.ModelEnumName
-import custom.validation.openapi.rules.models.name.ModelName
 import custom.validation.openapi.utils.FindSpecificationFiles
+import custom.validation.openapi.utils.GetConfigRules
 import io.swagger.parser.OpenAPIParser
 import org.gradle.api.Plugin
 import org.gradle.api.Project
@@ -36,10 +26,17 @@ class Plugin : Plugin<Project> {
                 task.doLast {
                     FindSpecificationFiles().findSpecs(pathToSpec = extensions.specPath, pathToProject = pathToProject)
                         .forEach { spec ->
+                            val configRules: MutableMap<String, Boolean> = GetConfigRules()
+                                .getConfigRules(extensions = extensions, spec = spec)
+
                             println("\u001b[0;33m################"
                                 +"\nStart check: ${spec.name.toUpperCase()}"
                                 +"\n################\u001b[0m"
                             )
+
+                            //TODO
+                            configRules.forEach { (key, value) -> println("$key: $value") }
+
                             val openAPI = OpenAPIParser().readLocation(spec.toString(), null, null).openAPI
                             val errorInSpec: MutableList<String> = ArrayList()
 
