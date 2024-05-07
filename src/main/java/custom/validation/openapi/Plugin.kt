@@ -9,6 +9,7 @@ import custom.validation.openapi.rules.methods.summary.SummaryForMethodIsNotEmpt
 import custom.validation.openapi.rules.models.descriptions.ModelDescription
 import custom.validation.openapi.rules.models.descriptions.ModelPropertiesDescription
 import custom.validation.openapi.rules.models.fields.RequiredFieldInModel
+import custom.validation.openapi.rules.models.name.ModelEnumName
 import custom.validation.openapi.rules.models.name.ModelName
 import custom.validation.openapi.utils.FindSpecificationFiles
 import io.swagger.parser.OpenAPIParser
@@ -71,6 +72,9 @@ class Plugin : Plugin<Project> {
 
                             val requiredFieldInModel = RequiredFieldInModel().checkRequiredFieldInModel(openAPI)
                             errorInSpec.addAll(requiredFieldInModel)
+
+                            val modelEnumName = ModelEnumName().checkModelEnumName(openAPI)
+                            errorInSpec.addAll(modelEnumName)
 
                             if (errorInSpec.isNotEmpty()) {
                                 errorInSpec.forEachIndexed { index, error ->
