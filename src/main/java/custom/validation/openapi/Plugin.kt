@@ -8,6 +8,8 @@ import custom.validation.openapi.rules.methods.parameters.FormatNameOfParameters
 import custom.validation.openapi.rules.methods.summary.SummaryForMethodIsNotEmpty
 import custom.validation.openapi.rules.models.descriptions.ModelDescription
 import custom.validation.openapi.rules.models.descriptions.ModelPropertiesDescription
+import custom.validation.openapi.rules.models.fields.RequiredFieldInModel
+import custom.validation.openapi.rules.models.name.ModelName
 import custom.validation.openapi.utils.FindSpecificationFiles
 import io.swagger.parser.OpenAPIParser
 import org.gradle.api.Plugin
@@ -63,6 +65,12 @@ class Plugin : Plugin<Project> {
 
                             val modelPropertiesDescription = ModelPropertiesDescription().checkModelPropertiesDescription(openAPI)
                             errorInSpec.addAll(modelPropertiesDescription)
+
+                            val modelName = ModelName().checkModelName(openAPI)
+                            errorInSpec.addAll(modelName!!)
+
+                            val requiredFieldInModel = RequiredFieldInModel().checkRequiredFieldInModel(openAPI)
+                            errorInSpec.addAll(requiredFieldInModel)
 
                             if (errorInSpec.isNotEmpty()) {
                                 errorInSpec.forEachIndexed { index, error ->
