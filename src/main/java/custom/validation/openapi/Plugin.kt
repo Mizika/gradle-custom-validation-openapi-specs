@@ -55,7 +55,7 @@ class Plugin : Plugin<Project> {
                             errorInSpec.addAll(summaryNotEmpty!!)
 
                             val basicResponseCode = BasicResponseCode().checkBasicResponseCode(openAPI)
-                            errorInSpec.addAll(basicResponseCode!!)
+                            errorInSpec.addAll(basicResponseCode)
 
                             val formatParameters = FormatNameOfParameters().checkFormatNameOfParameters(openAPI)
                             errorInSpec.addAll(formatParameters!!)
