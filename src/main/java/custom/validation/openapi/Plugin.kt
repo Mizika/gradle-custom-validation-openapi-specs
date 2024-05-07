@@ -6,6 +6,8 @@ import custom.validation.openapi.rules.methods.operationid.OperationIdCamelCase
 import custom.validation.openapi.rules.methods.operationid.OperationIdIsNotEmpty
 import custom.validation.openapi.rules.methods.parameters.FormatNameOfParameters
 import custom.validation.openapi.rules.methods.summary.SummaryForMethodIsNotEmpty
+import custom.validation.openapi.rules.models.descriptions.ModelDescription
+import custom.validation.openapi.rules.models.descriptions.ModelPropertiesDescription
 import custom.validation.openapi.utils.FindSpecificationFiles
 import io.swagger.parser.OpenAPIParser
 import org.gradle.api.Plugin
@@ -55,6 +57,12 @@ class Plugin : Plugin<Project> {
 
                             val formatParameters = FormatNameOfParameters().checkFormatNameOfParameters(openAPI)
                             errorInSpec.addAll(formatParameters!!)
+
+                            val modelDescriptions = ModelDescription().checkModelDescription(openAPI)
+                            errorInSpec.addAll(modelDescriptions!!)
+
+                            val modelPropertiesDescription = ModelPropertiesDescription().checkModelPropertiesDescription(openAPI)
+                            errorInSpec.addAll(modelPropertiesDescription)
 
                             if (errorInSpec.isNotEmpty()) {
                                 errorInSpec.forEachIndexed { index, error ->
