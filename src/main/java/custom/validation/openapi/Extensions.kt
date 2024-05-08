@@ -9,6 +9,6 @@ open class Extensions {
     /**
      * Параметр для указания исключений правил для контракта
      */
-    open var config: MutableMap<String, MutableMap<String, Boolean>> = mutableMapOf()
+    open var ignore: MutableMap<String, MutableList<String>> = mutableMapOf()
 
 }

@@ -26,7 +26,7 @@ class Plugin : Plugin<Project> {
                 task.doLast {
                     FindSpecificationFiles().findSpecs(pathToSpec = extensions.specPath, pathToProject = pathToProject)
                         .forEach { spec ->
-                            val configRules: MutableMap<String, Boolean> = GetConfigRules()
+                            val ignore: MutableList<String> = GetConfigRules()
                                 .getConfigRules(extensions = extensions, spec = spec)
 
                             println("\u001b[0;33m################"
@@ -35,7 +35,9 @@ class Plugin : Plugin<Project> {
                             )
 
                             //TODO
-                            configRules.forEach { (key, value) -> println("$key: $value") }
+                            ignore.forEach {
+                                println(it)
+                            }
 
                             val openAPI = OpenAPIParser().readLocation(spec.toString(), null, null).openAPI
                             val errorInSpec: MutableList<String> = ArrayList()

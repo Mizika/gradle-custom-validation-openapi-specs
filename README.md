@@ -47,14 +47,14 @@ validator {
 ```
 config - конфигурация исключений, параметр необязательный.
         - имя спецификации
-        - правило которое необходимо исключить : true/false
+        - правило которое необходимо исключить
         
 validator {
     specPath = "src/main/resources"
-    config = [
+    ignore = [
             "ump-bdui": [
-                    "basic-response-code": true,
-                     "operationId-present": true
+                    "basic-response-code",
+                     "operationId-present"
             ]
     ]
 }
