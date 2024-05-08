@@ -5,8 +5,10 @@ import custom.validation.openapi.rules.models.CombinedCheckModels
 import custom.validation.openapi.utils.FindSpecificationFiles
 import custom.validation.openapi.utils.GetConfigRules
 import io.swagger.parser.OpenAPIParser
+import org.gradle.api.GradleException
 import org.gradle.api.Plugin
 import org.gradle.api.Project
+import kotlin.system.exitProcess
 
 class Plugin : Plugin<Project> {
 
@@ -24,6 +26,7 @@ class Plugin : Plugin<Project> {
             val pathToProject = target.projectDir.absolutePath
             target.tasks.register("validator") { task ->
                 task.doLast {
+                    val allErrorInSpec: MutableList<String> = ArrayList()
                     FindSpecificationFiles().findSpecs(pathToSpec = extensions.specPath, pathToProject = pathToProject)
                         .forEach { spec ->
                             val ignore: MutableList<String> = GetConfigRules()
@@ -50,7 +53,11 @@ class Plugin : Plugin<Project> {
                             } else {
                                 println("\u001b[0;32mСпецификация в порядке, так держать!\u001b[0m")
                             }
+                            allErrorInSpec.addAll(errorInSpec)
                         }
+                    if (allErrorInSpec.isNotEmpty()) {
+                        throw GradleException("Validation failed.")
+                    }
                 }
                 task.group = "validation specs"
             }
