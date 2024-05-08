@@ -12,26 +12,25 @@ import io.swagger.v3.oas.models.OpenAPI
  * Класс с объединенными правилами для проверки методов
  */
 class CombinedCheckMethods {
-    fun combinedCheckMethods(openAPI: OpenAPI): MutableList<String> {
-        val errorInMethods: MutableList<String> = ArrayList()
 
-        val operationIdCamelCase = OperationIdCamelCase().checkOperationIdCamelCase(openAPI)
-        errorInMethods.addAll(operationIdCamelCase!!)
+    fun combinedCheckMethods(openAPI: OpenAPI, ignore: List<String>): List<String> {
+        val errorInMethods = mutableListOf<String>()
 
-        val operationIdNotEmpty = OperationIdIsNotEmpty().checkOperationIdIsNotEmpty(openAPI)
-        errorInMethods.addAll(operationIdNotEmpty!!)
+        val methodChecks = mapOf(
+            "operationId-name-style" to OperationIdCamelCase()::checkOperationIdCamelCase,
+            "operationId-present" to OperationIdIsNotEmpty()::checkOperationIdIsNotEmpty,
+            "description-method" to DescriptionForMethodIsNotEmpty()::checkDescriptionIsNotEmpty,
+            "summary-method" to SummaryForMethodIsNotEmpty()::checkSummaryIsNotEmpty,
+            "basic-response-code" to BasicResponseCode()::checkBasicResponseCode,
+            "parameters-name" to FormatNameOfParameters()::checkFormatNameOfParameters
+        )
 
-        val descriptionNotEmpty = DescriptionForMethodIsNotEmpty().checkDescriptionIsNotEmpty(openAPI)
-        errorInMethods.addAll(descriptionNotEmpty!!)
-
-        val summaryNotEmpty = SummaryForMethodIsNotEmpty().checkSummaryIsNotEmpty(openAPI)
-        errorInMethods.addAll(summaryNotEmpty!!)
-
-        val basicResponseCode = BasicResponseCode().checkBasicResponseCode(openAPI)
-        errorInMethods.addAll(basicResponseCode)
-
-        val formatParameters = FormatNameOfParameters().checkFormatNameOfParameters(openAPI)
-        errorInMethods.addAll(formatParameters!!)
+        for ((checkName, checkMethod) in methodChecks) {
+            if (!ignore.contains(checkName)) {
+                val errors = checkMethod(openAPI)
+                errors?.let { errorInMethods.addAll(it) }
+            }
+        }
 
         return errorInMethods
     }

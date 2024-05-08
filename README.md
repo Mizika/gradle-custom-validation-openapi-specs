@@ -33,15 +33,15 @@ validator {
 - operationId-name-style
 - operationId-present
 - description-method
-- summary-methods
+- summary-method
 - basic-response-code
 - parameters-name
 
 #### Имена правил моделей:
 - description-model
-- description-parametr-model
+- description-parameter-model
 - model-name
-- required-parametr-model
+- required-parameter-model
 - enum-name-model
 
 ```

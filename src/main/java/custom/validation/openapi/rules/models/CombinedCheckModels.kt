@@ -11,24 +11,24 @@ import io.swagger.v3.oas.models.OpenAPI
  * Класс с объединенными правилами для проверки моделей
  */
 class CombinedCheckModels {
-    fun combinedCheckModels(openAPI: OpenAPI): MutableList<String> {
-        val errorInModels: MutableList<String> = ArrayList()
 
-        val modelDescriptions = ModelDescription().checkModelDescription(openAPI)
-        errorInModels.addAll(modelDescriptions!!)
+    fun combinedCheckModels(openAPI: OpenAPI, ignore: List<String>): List<String> {
+        val errorInModels = mutableListOf<String>()
 
-        val modelPropertiesDescription = ModelPropertiesDescription().checkModelPropertiesDescription(openAPI)
-        errorInModels.addAll(modelPropertiesDescription)
+        val modelChecks = mapOf(
+            "description-model" to ModelDescription()::checkModelDescription,
+            "description-parameter-model" to ModelPropertiesDescription()::checkModelPropertiesDescription,
+            "model-name" to ModelName()::checkModelName,
+            "required-parameter-model" to RequiredFieldInModel()::checkRequiredFieldInModel,
+            "enum-name-model" to ModelEnumName()::checkModelEnumName
+        )
 
-        val modelName = ModelName().checkModelName(openAPI)
-        errorInModels.addAll(modelName!!)
-
-        val requiredFieldInModel = RequiredFieldInModel().checkRequiredFieldInModel(openAPI)
-        errorInModels.addAll(requiredFieldInModel)
-
-        val modelEnumName = ModelEnumName().checkModelEnumName(openAPI)
-        errorInModels.addAll(modelEnumName)
-
+        for ((checkName, checkMethod) in modelChecks) {
+            if (!ignore.contains(checkName)) {
+                val errors = checkMethod(openAPI)
+                errors?.let { errorInModels.addAll(it) }
+            }
+        }
         return errorInModels
     }
 }

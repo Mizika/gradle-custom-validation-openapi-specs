@@ -34,18 +34,13 @@ class Plugin : Plugin<Project> {
                                 +"\n################\u001b[0m"
                             )
 
-                            //TODO
-                            ignore.forEach {
-                                println(it)
-                            }
-
                             val openAPI = OpenAPIParser().readLocation(spec.toString(), null, null).openAPI
                             val errorInSpec: MutableList<String> = ArrayList()
 
-                            val checkMethods = CombinedCheckMethods().combinedCheckMethods(openAPI)
+                            val checkMethods = CombinedCheckMethods().combinedCheckMethods(openAPI, ignore)
                             errorInSpec.addAll(checkMethods)
 
-                            val checkModels = CombinedCheckModels().combinedCheckModels(openAPI)
+                            val checkModels = CombinedCheckModels().combinedCheckModels(openAPI, ignore)
                             errorInSpec.addAll(checkModels)
 
                             if (errorInSpec.isNotEmpty()) {
