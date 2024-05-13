@@ -60,3 +60,6 @@ validator {
 }
 
 ```
+### Результат выполнения валидатора
+1. Результат выводится в консоль
+2. Результат сохраняется в файл `validation_errors.txt` по пути `projectDir.absolutePath + /build + /validator`

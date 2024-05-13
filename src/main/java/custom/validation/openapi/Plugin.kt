@@ -4,11 +4,11 @@ import custom.validation.openapi.rules.methods.CombinedCheckMethods
 import custom.validation.openapi.rules.models.CombinedCheckModels
 import custom.validation.openapi.utils.FindSpecificationFiles
 import custom.validation.openapi.utils.GetConfigRules
+import custom.validation.openapi.utils.SaveToFile
 import io.swagger.parser.OpenAPIParser
 import org.gradle.api.GradleException
 import org.gradle.api.Plugin
 import org.gradle.api.Project
-import kotlin.system.exitProcess
 
 class Plugin : Plugin<Project> {
 
@@ -26,7 +26,7 @@ class Plugin : Plugin<Project> {
             val pathToProject = target.projectDir.absolutePath
             target.tasks.register("validator") { task ->
                 task.doLast {
-                    val allErrorInSpec: MutableList<String> = ArrayList()
+                    val allErrorInSpec: MutableMap<String, MutableList<String>> = mutableMapOf()
                     FindSpecificationFiles().findSpecs(pathToSpec = extensions.specPath, pathToProject = pathToProject)
                         .forEach { spec ->
                             val ignore: MutableList<String> = GetConfigRules()
@@ -53,9 +53,12 @@ class Plugin : Plugin<Project> {
                             } else {
                                 println("\u001b[0;32mСпецификация в порядке, так держать!\u001b[0m")
                             }
-                            allErrorInSpec.addAll(errorInSpec)
+                            allErrorInSpec[spec.name.toUpperCase()] = errorInSpec
                         }
                     if (allErrorInSpec.isNotEmpty()) {
+                        SaveToFile().saveErrorsToFile(
+                            errors = allErrorInSpec,
+                            fileName = "$pathToProject/build/validator/validation_errors.txt")
                         throw GradleException("Validation failed.")
                     }
                 }
