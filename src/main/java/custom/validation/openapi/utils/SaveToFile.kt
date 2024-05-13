@@ -1,6 +1,7 @@
 package custom.validation.openapi.utils
 
 import java.io.File
+import java.nio.charset.StandardCharsets
 
 /**
  * Класс с методом для сохранения в файл
@@ -8,18 +9,20 @@ import java.io.File
 class SaveToFile {
     fun saveErrorsToFile(errors: MutableMap<String, MutableList<String>>, fileName: String) {
         val file = File(fileName)
-        file.delete()
+        if (file.exists()) {
+            file.delete()
+        }
         file.parentFile.mkdirs()
         file.createNewFile()
-        errors.forEach { (specName, errors) ->
-            if (errors.isNotEmpty()) {
-                file.appendText(
-                    "############\n" +
-                            "$specName:\n" +
-                            "############\n"
-                )
-                errors.forEachIndexed { index, error ->
-                    file.appendText("${index + 1}. $error\n")
+        file.bufferedWriter(StandardCharsets.UTF_8).use { writer ->
+            errors.forEach { (specName, errorsList) ->
+                if (errorsList.isNotEmpty()) {
+                    writer.write("############\n")
+                    writer.write("$specName:\n")
+                    writer.write("############\n")
+                    errorsList.forEachIndexed { index, error ->
+                        writer.write("${index + 1}. $error\n")
+                    }
                 }
             }
         }
