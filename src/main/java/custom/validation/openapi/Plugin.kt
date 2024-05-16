@@ -32,9 +32,10 @@ class Plugin : Plugin<Project> {
                             val ignore: MutableList<String> = GetConfigRules()
                                 .getConfigRules(extensions = extensions, spec = spec)
 
-                            println("\u001b[0;33m################"
-                                +"\nStart check: ${spec.name.toUpperCase()}"
-                                +"\n################\u001b[0m"
+                            println(
+                                "\u001b[0;33m################"
+                                        + "\nStart check: ${spec.name.toUpperCase()}"
+                                        + "\n################\u001b[0m"
                             )
 
                             val openAPI = OpenAPIParser().readLocation(spec.toString(), null, null).openAPI
@@ -55,10 +56,12 @@ class Plugin : Plugin<Project> {
                             }
                             allErrorInSpec[spec.name.toUpperCase()] = errorInSpec
                         }
-                    if (allErrorInSpec.isNotEmpty()) {
+                    val allListsNotEmpty = allErrorInSpec.all { (_, errorList) -> errorList.isNotEmpty() }
+                    if (allListsNotEmpty) {
                         SaveToFile().saveErrorsToFile(
                             errors = allErrorInSpec,
-                            fileName = "$pathToProject/build/validator/validation_errors.txt")
+                            fileName = "$pathToProject/build/validator/validation_errors.txt"
+                        )
                         throw GradleException("Validation failed.")
                     }
                 }
