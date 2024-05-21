@@ -20,7 +20,7 @@ class CombinedCheckModels {
             "description-parameter-model" to ModelPropertiesDescription()::checkModelPropertiesDescription,
             "model-name" to ModelName()::checkModelName,
             "required-parameter-model" to RequiredFieldInModel()::checkRequiredFieldInModel,
-            "enum-name-model" to ModelEnumName()::checkModelEnumName
+            "enum-name-model" to ModelEnumName()::checkEnumNamesInModel
         )
 
         for ((checkName, checkMethod) in modelChecks) {
