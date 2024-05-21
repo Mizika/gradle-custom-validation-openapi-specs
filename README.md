@@ -37,6 +37,7 @@ validator {
 - summary-method
 - basic-response-code
 - parameters-name
+- enum-name-parameter
 
 #### Имена правил моделей:
 - description-model
