@@ -7,6 +7,7 @@ import custom.validation.openapi.rules.methods.operationid.OperationIdIsNotEmpty
 import custom.validation.openapi.rules.methods.parameters.EnumNameInParameters
 import custom.validation.openapi.rules.methods.parameters.FormatNameOfParameters
 import custom.validation.openapi.rules.methods.summary.SummaryForMethodIsNotEmpty
+import custom.validation.openapi.rules.methods.tags.TagsName
 import io.swagger.v3.oas.models.OpenAPI
 
 /**
@@ -24,7 +25,8 @@ class CombinedCheckMethods {
             "summary-method" to SummaryForMethodIsNotEmpty()::checkSummaryIsNotEmpty,
             "basic-response-code" to BasicResponseCode()::checkBasicResponseCode,
             "parameters-name" to FormatNameOfParameters()::checkFormatNameOfParameters,
-            "enum-name-parameter" to EnumNameInParameters()::checkEnumNamesInParameters
+            "enum-name-parameter" to EnumNameInParameters()::checkEnumNamesInParameters,
+            "tags-name" to TagsName()::checkTagsName
         )
 
         for ((checkName, checkMethod) in methodChecks) {

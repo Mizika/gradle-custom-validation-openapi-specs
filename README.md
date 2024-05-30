@@ -22,6 +22,7 @@ validator {
 5. Проверка, что в методах учтены все обязательные `responses codes: [20x, 40x, 50x]` = `[basic-response-code]`
 6. Проверка, что в методах в поле `parameters` значение начинается с маленькой буквы = `[parameters-name]`
 7. Проверка, что имя `ENUM` в параметрах прописано в стиле аппер кейс и имеет нижнее подчеркивание где это необходимо = `[enum-name-parameter]`
+8. Проверка, что теги как глобальные так и в методах написаны на английском языке = `[tags-name]`
 #### В моделях:
 1. Проверка, что для моделей присутствует поле `Description` = `[description-model]`
 2. Проверка, что для параметров в модели присутствует поле `Description` = `[description-parameter-model]`
@@ -38,6 +39,7 @@ validator {
 - basic-response-code
 - parameters-name
 - enum-name-parameter
+- tags-name
 
 #### Имена правил моделей:
 - description-model

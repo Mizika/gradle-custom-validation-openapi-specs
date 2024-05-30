@@ -56,13 +56,14 @@ class Plugin : Plugin<Project> {
                             }
                             allErrorInSpec[spec.name.toUpperCase()] = errorInSpec
                         }
-                    val allListsNotEmpty = allErrorInSpec.all { (_, errorList) -> errorList.isNotEmpty() }
-                    if (allListsNotEmpty) {
+                    val hasNonEmptyLists = allErrorInSpec.any { (_, errorList) -> errorList.isNotEmpty() }
+
+                    if (hasNonEmptyLists) {
                         SaveToFile().saveErrorsToFile(
                             errors = allErrorInSpec,
                             fileName = "$pathToProject/build/validator/validation_errors.txt"
                         )
-                        throw GradleException("Validation failed.")
+                        throw GradleException("Validation contracts failed.")
                     }
                 }
                 task.group = "validation specs"
