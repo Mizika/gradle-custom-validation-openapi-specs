@@ -10,6 +10,9 @@ class ModelPropertiesDescription {
         val checkModelPropertiesDescription: MutableList<String> = mutableListOf()
         openAPI.components?.schemas?.forEach { (modelName, model) ->
             model.properties?.forEach { (propertyName, property) ->
+                // Если свойство содержит $ref, пропускаем его проверку
+                if (property.`$ref` != null) return@forEach
+
                 val description = property.description
                 if (description == null || description.length <= 2) {
                     val message = if (description == null)
