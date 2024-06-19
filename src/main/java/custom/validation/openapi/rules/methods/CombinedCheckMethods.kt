@@ -2,12 +2,14 @@ package custom.validation.openapi.rules.methods
 
 import custom.validation.openapi.rules.methods.description.DescriptionForMethodIsNotEmpty
 import custom.validation.openapi.rules.methods.errorcode.BasicResponseCode
+import custom.validation.openapi.rules.methods.global.CheckInfoVersion
+import custom.validation.openapi.rules.methods.global.CheckOpenAPIVersion
 import custom.validation.openapi.rules.methods.operationid.OperationIdCamelCase
 import custom.validation.openapi.rules.methods.operationid.OperationIdIsNotEmpty
 import custom.validation.openapi.rules.methods.parameters.EnumNameInParameters
 import custom.validation.openapi.rules.methods.parameters.FormatNameOfParameters
 import custom.validation.openapi.rules.methods.summary.SummaryForMethodIsNotEmpty
-import custom.validation.openapi.rules.methods.tags.TagsName
+import custom.validation.openapi.rules.methods.tags.*
 import io.swagger.v3.oas.models.OpenAPI
 
 /**
@@ -26,7 +28,13 @@ class CombinedCheckMethods {
             "basic-response-code" to BasicResponseCode()::checkBasicResponseCode,
             "parameters-name" to FormatNameOfParameters()::checkFormatNameOfParameters,
             "enum-name-parameter" to EnumNameInParameters()::checkEnumNamesInParameters,
-            "tags-name" to TagsName()::checkTagsName
+            "tags-name" to TagsName()::checkTagsName,
+            "tags-description" to CheckTagsDescription()::checkTagsDescription,
+            "tags-operation" to CheckOperationTags()::checkOperationTags,
+            "tags-list-operation" to CheckOperationTagsValidity()::checkOperationTagsValidity,
+            "tags-section" to CheckTagsSection()::checkTagsSection,
+            "global-version" to CheckInfoVersion()::checkInfoVersion,
+            "global-openapi-version" to CheckOpenAPIVersion()::checkOpenAPIVersion
         )
 
         for ((checkName, checkMethod) in methodChecks) {
