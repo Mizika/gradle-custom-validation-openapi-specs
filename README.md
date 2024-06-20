@@ -46,6 +46,12 @@ validator {
 - parameters-name
 - enum-name-parameter
 - tags-name
+- tags-operation
+- tags-list-operation
+- tags-description
+- tags-section
+- global-version
+- global-openapi-version
 
 #### Имена правил моделей:
 - description-model
