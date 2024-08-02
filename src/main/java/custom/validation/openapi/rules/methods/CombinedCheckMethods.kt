@@ -8,6 +8,7 @@ import custom.validation.openapi.rules.methods.operationid.OperationIdCamelCase
 import custom.validation.openapi.rules.methods.operationid.OperationIdIsNotEmpty
 import custom.validation.openapi.rules.methods.parameters.EnumNameInParameters
 import custom.validation.openapi.rules.methods.parameters.FormatNameOfParameters
+import custom.validation.openapi.rules.methods.path.CheckPathStyle
 import custom.validation.openapi.rules.methods.summary.SummaryForMethodIsNotEmpty
 import custom.validation.openapi.rules.methods.tags.*
 import io.swagger.v3.oas.models.OpenAPI
@@ -34,7 +35,8 @@ class CombinedCheckMethods {
             "tags-list-operation" to CheckOperationTagsValidity()::checkOperationTagsValidity,
             "tags-section" to CheckTagsSection()::checkTagsSection,
             "global-version" to CheckInfoVersion()::checkInfoVersion,
-            "global-openapi-version" to CheckOpenAPIVersion()::checkOpenAPIVersion
+            "global-openapi-version" to CheckOpenAPIVersion()::checkOpenAPIVersion,
+            "check-path-style" to CheckPathStyle()::checkPathStyle
         )
 
         for ((checkName, checkMethod) in methodChecks) {
