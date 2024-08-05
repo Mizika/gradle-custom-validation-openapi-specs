@@ -11,14 +11,17 @@ class CheckPathStyle {
         val issues: MutableList<String> = mutableListOf()
         val camelCasePattern = Regex(".*[A-Z].*")
         val underscorePattern = Regex(".*_.*")
+        val pathVariablePattern = Regex("\\{[^}]*\\}")
 
         openAPI.paths?.forEach { (path, _) ->
             path.split('/').forEach { segment ->
-                if (segment.matches(camelCasePattern)) {
-                    issues.add("Путь \"$path\" содержит сегмент \"$segment\" в стиле camelCase.")
-                }
-                if (segment.matches(underscorePattern)) {
-                    issues.add("Путь \"$path\" содержит сегмент \"$segment\" с символом underscore _ .")
+                if (!segment.matches(pathVariablePattern)) {
+                    if (segment.matches(camelCasePattern)) {
+                        issues.add("Путь \"$path\" содержит сегмент \"$segment\" в стиле camelCase.")
+                    }
+                    if (segment.matches(underscorePattern)) {
+                        issues.add("Путь \"$path\" содержит сегмент \"$segment\" с символом underscore (_).")
+                    }
                 }
             }
         }
