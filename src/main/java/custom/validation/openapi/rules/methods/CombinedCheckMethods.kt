@@ -1,5 +1,6 @@
 package custom.validation.openapi.rules.methods
 
+import custom.validation.openapi.rules.methods.body.CheckBodyInMethodsThatShouldNotContainBody
 import custom.validation.openapi.rules.methods.description.DescriptionForMethodIsNotEmpty
 import custom.validation.openapi.rules.methods.errorcode.BasicResponseCode
 import custom.validation.openapi.rules.methods.global.CheckInfoVersion
@@ -8,6 +9,7 @@ import custom.validation.openapi.rules.methods.operationid.OperationIdCamelCase
 import custom.validation.openapi.rules.methods.operationid.OperationIdIsNotEmpty
 import custom.validation.openapi.rules.methods.parameters.EnumNameInParameters
 import custom.validation.openapi.rules.methods.parameters.FormatNameOfParameters
+import custom.validation.openapi.rules.methods.path.CheckPathParameters
 import custom.validation.openapi.rules.methods.path.CheckPathStyle
 import custom.validation.openapi.rules.methods.summary.SummaryForMethodIsNotEmpty
 import custom.validation.openapi.rules.methods.tags.*
@@ -36,7 +38,9 @@ class CombinedCheckMethods {
             "tags-section" to CheckTagsSection()::checkTagsSection,
             "global-version" to CheckInfoVersion()::checkInfoVersion,
             "global-openapi-version" to CheckOpenAPIVersion()::checkOpenAPIVersion,
-            "check-path-style" to CheckPathStyle()::checkPathStyle
+            "check-path-style" to CheckPathStyle()::checkPathStyle,
+            "check-path-parameters" to CheckPathParameters()::checkPathParameters,
+            "check-body-in-method" to CheckBodyInMethodsThatShouldNotContainBody()::checkBodyInMethodsThatShouldNotContainBody
         )
 
         for ((checkName, checkMethod) in methodChecks) {

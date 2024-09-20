@@ -30,6 +30,8 @@ validator {
 13. Проверка, что в секции info есть поле version, которое не пустое и соответствует паттерну SemVer (Semantic Versioning) = `[global-version]`
 14. Проверка, что версия OpenApi имеет значение 3.0.1 = `[global-openapi-version]`
 15. Проверка, что путь не содержит символ `_` и не написан в стиле `camelCase` = `[check-path-style]`
+16. Проверка path параметров = `[check-path-parameters]`
+17. Првоерка наличия тела в методах, которые не должны содержать тело = `[check-body-in-method]`
 #### В моделях:
 1. Проверка, что для моделей присутствует поле `Description` = `[description-model]`
 2. Проверка, что для параметров в модели присутствует поле `Description` = `[description-parameter-model]`
@@ -54,6 +56,8 @@ validator {
 - global-version
 - global-openapi-version
 - check-path-style
+- check-path-parameters
+- check-body-in-method
 
 #### Имена правил моделей:
 - description-model
