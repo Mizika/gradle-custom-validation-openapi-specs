@@ -2,6 +2,7 @@ package custom.validation.openapi.rules.methods
 
 import custom.validation.openapi.rules.methods.body.CheckBodyInMethodsThatShouldNotContainBody
 import custom.validation.openapi.rules.methods.description.DescriptionForMethodIsNotEmpty
+import custom.validation.openapi.rules.methods.error.Check404ErrorForOperationsWithoutPathParams
 import custom.validation.openapi.rules.methods.errorcode.BasicResponseCode
 import custom.validation.openapi.rules.methods.global.CheckInfoVersion
 import custom.validation.openapi.rules.methods.global.CheckOpenAPIVersion
@@ -40,7 +41,8 @@ class CombinedCheckMethods {
             "global-openapi-version" to CheckOpenAPIVersion()::checkOpenAPIVersion,
             "check-path-style" to CheckPathStyle()::checkPathStyle,
             "check-path-parameters" to CheckPathParameters()::checkPathParameters,
-            "check-body-in-method" to CheckBodyInMethodsThatShouldNotContainBody()::checkBodyInMethodsThatShouldNotContainBody
+            "check-body-in-method" to CheckBodyInMethodsThatShouldNotContainBody()::checkBodyInMethodsThatShouldNotContainBody,
+            "check-404-code" to Check404ErrorForOperationsWithoutPathParams()::check404ErrorForOperationsWithoutPathParams
         )
 
         for ((checkName, checkMethod) in methodChecks) {

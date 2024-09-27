@@ -32,6 +32,7 @@ validator {
 15. Проверка, что путь не содержит символ `_` и не написан в стиле `camelCase` = `[check-path-style]`
 16. Проверка path параметров = `[check-path-parameters]`
 17. Првоерка наличия тела в методах, которые не должны содержать тело = `[check-body-in-method]`
+18. Проверка, что метод без `path параметров` не содержит ошибку `404` = `[check-404-code]`
 #### В моделях:
 1. Проверка, что для моделей присутствует поле `Description` = `[description-model]`
 2. Проверка, что для параметров в модели присутствует поле `Description` = `[description-parameter-model]`
@@ -58,6 +59,7 @@ validator {
 - check-path-style
 - check-path-parameters
 - check-body-in-method
+- check-404-code
 
 #### Имена правил моделей:
 - description-model
