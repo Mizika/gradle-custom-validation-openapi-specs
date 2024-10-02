@@ -1,4 +1,4 @@
-package custom.validation.openapi.rules.models.name
+package custom.validation.openapi.rules.models.enumcheck
 
 import io.swagger.v3.oas.models.OpenAPI
 
@@ -6,6 +6,7 @@ import io.swagger.v3.oas.models.OpenAPI
  * Класс для проверки, что имя енама в модели прописано в стиле аппер кейс и имеет нижнее подчеркивание где это необходимо
  */
 class ModelEnumName {
+
     fun checkEnumNamesInModel(openAPI: OpenAPI): List<String> {
         val checkEnumName = mutableListOf<String>()
         val camelCasePattern = Regex("^[A-Z][A-Z0-9]*(_[A-Z0-9]+)*$")
@@ -29,4 +30,5 @@ class ModelEnumName {
 
         return checkEnumName
     }
+
 }
